@@ -30,7 +30,4 @@ foreach ($singleServer in $servers) {
     Set-Item WSMAN:\Localhost\Client\TrustedHosts -Value $singleServer.serverName -Force -Concatenate
 }
 
-$hciServersNameList = "WIN-SPD2BH8H94O", "WIN-KVL370N900H"
-Write-Host $hciServersNameList
-
-New-Cluster -Name $clusterName -Node $hciServersNameList -nostorage
+write-host $hciServersNameList
