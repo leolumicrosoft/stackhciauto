@@ -29,10 +29,8 @@ printVar "netAdaptor1" "netAdaptor2" "domainName" "domainUser" "domainPasswd" "c
 
 $servers= $appConfig.configuration.servers.node
 $hciServersNameList=@()
-$hciServersIPList=@()
 foreach ($singleServer in $servers) {
     $hciServersNameList += $singleServer.serverName
-    $hciServersIPList += $singleServer.ip
     Write-Debug $singleServer.serverName
     Write-Debug $singleServer.ip
     Write-Debug $singleServer.passwd
@@ -40,3 +38,17 @@ foreach ($singleServer in $servers) {
 }
 
 #https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster-powershell
+
+#--------- Step 4: Configure host networking ---------
+#The script below is to create a fully converged intent that compute/sotrage/management traffic are altogether in both adaptors, it can be changed
+#reference link: https://learn.microsoft.com/en-us/azure-stack/hci/deploy/network-atc?tabs=22H2
+#Network intent is only needed to be created in one HCI server, it will be applied to all cluster servers
+Write-Host "Create fully converged intent using network adaptors $($netAdaptor1) $($netAdaptor2)"
+$ScriptBlockContent = {
+    $netAdaptor1 = $args[0]
+    $netAdaptor2 = $args[1]    
+    Add-NetIntent -Name ConvergedIntent -Management -Compute -Storage -AdapterName $netAdaptor1,$netAdaptor2
+}
+Invoke-Command -ComputerName $hciServersNameList[0] -ScriptBlock $ScriptBlockContent -ArgumentList $netAdaptor1,$netAdaptor2
+
+#--------- Step 6: Enable Storage Spaces Direct ---------

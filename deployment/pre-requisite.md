@@ -1,4 +1,5 @@
 #### Prepare AD Domain controller
+- If not yet, create a AD organization unit that all HCI servers will be added into.
 
 #### Prepare management PC 
 
@@ -14,7 +15,7 @@ https://learn.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-8.3.0
 
 #### HCI Server  
 
-- HCI OS ready
+- HCI OS ready (22H2 or above)
 - DNS in each HCI server must be set correctly so they can reach domain server by domain name.
   Sample command(in each HCI server): netsh interface ip set dns name="yournetadaptorname" static 10.106.99.6
   where in the sample 10.106.99.6 is the domain controller IP address

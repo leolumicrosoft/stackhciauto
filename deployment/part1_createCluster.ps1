@@ -54,6 +54,8 @@ Preparation work:
   where in the sample 10.106.99.6 is the domain controller IP address
 
 - Update management PC to the latest OS patch
+
+- AD Organization Unit: If not yet, create a AD organization unit that all HCI servers will be added into.
 #>
 
 #--------- Step 1.2: Join the domain and add domain accounts --------
@@ -105,15 +107,12 @@ foreach ($singleServer in $servers) {  #before server being added to domain, the
     Write-Host "Add domain administrator to local administrators group of server $($singleServer.serverName)"
     (Invoke-Command -ComputerName $singleServer.ip -Credential $cred -ScriptBlock $ScriptBlockContent -ArgumentList $domainUser)
 }
-
+# From here above, there is no need to specify HCI server credential because domain user has been added to each HCI server's "administrators" group
 
 
 $needWaitForRestart=$false
 foreach ($singleServer in $servers) {
     #--------- Step 1.3: Install roles and features ---------
-    $user = $singleServer.serverName + "\Administrator"
-    $passwd = convertto-securestring -AsPlainText -Force -String $singleServer.passwd
-    $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $user,$passwd
     Write-Host "Install roles and features in $($singleServer.serverName), then restart if there is change..."
     $ScriptBlockContent = {
         $execResult= (Install-WindowsFeature -Name "BitLocker", "Data-Center-Bridging", "Failover-Clustering", "FS-FileServer", "FS-Data-Deduplication", "Hyper-V", "Hyper-V-PowerShell", "RSAT-AD-Powershell", "RSAT-Clustering-PowerShell", "NetworkATC", "Storage-Replica" -IncludeAllSubFeature -IncludeManagementTools)
@@ -125,7 +124,7 @@ foreach ($singleServer in $servers) {
             Return $false
         }
     }
-    $execResult= (Invoke-Command -ComputerName $singleServer.serverName -Credential $cred -ScriptBlock $ScriptBlockContent)
+    $execResult= (Invoke-Command -ComputerName $singleServer.serverName -ScriptBlock $ScriptBlockContent)
     if($execResult) {$needWaitForRestart=$true}
 }
 
@@ -139,10 +138,6 @@ if($needWaitForRestart) {
 #--------- Step 2: Prep for cluster setup ---------
 #--------- Step 2.1: Prepare drives ---------
 foreach ($singleServer in $servers) {
-    #--------- Step 1.3: Install roles and features ---------
-    $user = $singleServer.serverName + "\Administrator"
-    $passwd = convertto-securestring -AsPlainText -Force -String $singleServer.passwd
-    $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $user,$passwd
     Write-Host "Prepare drives for $($singleServer.serverName)"
     $ScriptBlockContent = {
         Update-StorageProviderCache
@@ -159,7 +154,7 @@ foreach ($singleServer in $servers) {
         }
         Get-Disk | Where Number -Ne $Null | Where IsBoot -Ne $True | Where IsSystem -Ne $True | Where PartitionStyle -Eq RAW | Group -NoElement -Property FriendlyName
     }
-    Invoke-Command -ComputerName $singleServer.serverName -Credential $cred -ScriptBlock $ScriptBlockContent
+    Invoke-Command -ComputerName $singleServer.serverName -ScriptBlock $ScriptBlockContent
 }
 
 
