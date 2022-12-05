@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <servers adapter1="Embedded LOM 2 Port 1" adapter2="Embedded LOM 2 Port 2">
-    <node name="hciserver1" serverName="10.106.99.19" passwd="!Microsoft*"/>
-    <node name="hciserver2" serverName="10.106.99.16" passwd="!Microsoft*"/>
+    <node serverName="WIN-KVL370N900H" ip="10.106.99.19" passwd="!Microsoft*"/>
+    <node serverName="WIN-SPD2BH8H94O" ip="10.106.99.16" passwd="!Microsoft*"/>
   </servers>  
-  <domain domainUser="microsoft.local\Administrator" domainName="microsoft.local" domainPasswd="!Microsoft*"/> 
-  <cluster name="cluster" clusterName="HPELab1" clusterIp="10.106.99.50" intName="Cluster_ComputeStorage" volumeName="Volume1"/>
-  <witness name="witness" resourceGroup="xxx-stack_hci_common" location="eastus" storageAccName="xxxstackhciacc01"/>
+  <domain domainUser="microsoft.local\Administrator" domainName="microsoft.local" domainPasswd="!Microsoft*" OU="OU=HCICluster,DC=microsoft,DC=local
+"/> 
+  <cluster clusterName="HPELab1" clusterIp="10.106.100.100" intName="Cluster_ComputeStorage" volumeName="Volume1"/>
+  <witness resourceGroup="xxx-stack_hci_common" location="eastus" storageAccName="xxxstackhciacc01"/>
   <azureConfig name="azureConfig" subscriptionId="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" hciRgName="xxx-stackhci-cluster-rg"/>
 </configuration>

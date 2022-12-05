@@ -1,8 +1,10 @@
-$myServer1 = "10.106.99.19"
-Set-Item WSMAN:\Localhost\Client\TrustedHosts -Value $myServer1 -Force
+$myServer1 = "WIN-SPD2BH8H94O"
 
-$user = $myServer1 + "\Administrator"
-$myServer1Pass = "!Microsoft*"
-$passwd = convertto-securestring -AsPlainText -Force -String $myServer1Pass
-$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $user,$passwd
-Enter-PSSession -ComputerName $myServer1 -Credential $cred
+Enter-PSSession -ComputerName $myServer1
+
+#$session = New-PSSession -ComputerName $myServer1
+#Copy-Item -Path "C:\Users\Administrator.MICROSOFT\AppData\Local\Temp\Validation Report 2022.12.01 At 21.03.32.htm" -Destination "C:\stackhciauto" -FromSession $session
+
+#$hciServersNameList = "WIN-SPD2BH8H94O", "WIN-KVL370N900H"
+#New-Cluster -Name "HPELab1" -Node $hciServersNameList -nostorage -StaticAddres "10.106.100.100"
+#Test-Cluster -Include "Storage Spaces Direct", "Inventory", "Network", "System Configuration"
