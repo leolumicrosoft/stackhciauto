@@ -1,7 +1,7 @@
 
 resource "null_resource" "PowerShellScriptRunFirstTimeOnly" {
     provisioner "local-exec" {
-        command = "helpers\\get_processes.ps1 -First 10"
+        command = "[the power shell script to execute]"
         
         interpreter = ["PowerShell", "-Command"]
     }
