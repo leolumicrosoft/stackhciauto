@@ -97,6 +97,18 @@ if($needWaitForRestart) {
 }
 
 
+#--------- Set up proxy server for each HCI server node ----------
+foreach ($singleServer in $servers) {
+    Write-Host "Set http proxy for server $($singleServer.serverName)"
+    $ScriptBlockContent = {
+        netsh winhttp set proxy proxy-server=$proxyServer bypass-list=$proxyBypassList
+    }
+    (Invoke-Command -ComputerName $singleServer.serverName -ScriptBlock $ScriptBlockContent)
+}
+
+
+
+
 #--------- Step 2: Prep for cluster setup ---------
 #--------- Step 2.1: Prepare drives ---------
 foreach ($singleServer in $servers) {

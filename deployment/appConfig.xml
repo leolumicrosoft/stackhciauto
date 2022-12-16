@@ -7,4 +7,5 @@
   <domain domainUser="microsoft.local\Administrator" domainName="microsoft.local" domainPasswd="!Microsoft*" OU="OU=HCICluster,DC=microsoft,DC=local
 "/> 
   <cluster clusterName="HPELab1" clusterIp="10.106.100.100" storagePoolName="HPELab1 Storage Pool" volumeName="Volume1" volumeSize=1073741824/>
+  <httpProxy server="singtelproxy.net.vic:80" bypassList="localhost;*.singtel.corp.root;*.mydomain"/>
 </configuration>

@@ -25,7 +25,9 @@ function fetchConfigParameters() {
     $global:clusterIp = $appConfig.configuration.cluster.clusterIp
     $global:storagePoolName = $appConfig.configuration.cluster.storagePoolName
     $global:volumeName = $appConfig.configuration.cluster.volumeName
-    $global:volumeSize = $appConfig.configuration.cluster.volumeSize    
+    $global:volumeSize = $appConfig.configuration.cluster.volumeSize 
+    $global:proxyServer = $appConfig.configuration.httpProxy.server 
+    $global:proxyBypassList = $appConfig.configuration.httpProxy.bypassList 
         
     printVar "netAdaptor1" "netAdaptor2" "domainName" "domainUser" "domainPasswd" "clusterName" "clusterIp" "ADOU" "volumeName" "volumeSize" "storagePoolName"
 
